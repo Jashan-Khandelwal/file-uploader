@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())cas
+
+  folders Folder[]
+  files   File[]
+}
+
+model Folder {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  files  File[]
+  shares Share[]
+
+  // Two folders belonging to the same user can't share a name.
+  @@unique([userId, name])
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  name       String
+  size       Int
+  mimeType   String
+  // Where the bytes actually live. For local disk this is a filename on disk;
+  // when we swap in Cloudinary it becomes the remote public_id.
+  storageKey String
+  // Public URL, null while we're still on local disk.
+  url        String?
+  uploadedAt DateTime @default(now())
+
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId Int
+
+  owner  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+}
+
+// A time-limited public link to a folder. The uuid id is what appears in the URL.
+model Share {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId Int
+}
+
+// Backing table for @quixo3/prisma-session-store.
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}

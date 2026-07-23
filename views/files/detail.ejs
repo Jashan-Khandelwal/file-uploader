@@ -1,0 +1,33 @@
+<%- include('../partials/head') %>
+<h1><%= file.name %></h1>
+
+<table class="details">
+  <tr>
+    <th>Name</th>
+    <td><%= file.name %></td>
+  </tr>
+  <tr>
+    <th>Folder</th>
+    <td>
+      <a href="/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+    </td>
+  </tr>
+  <tr>
+    <th>Size</th>
+    <td><%= (file.size / 1024).toFixed(1) %> KB</td>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <td><%= file.mimeType %></td>
+  </tr>
+  <tr>
+    <th>Uploaded</th>
+    <td><%= file.uploadedAt.toLocaleString() %></td>
+  </tr>
+</table>
+
+<p>
+  <a class="btn" href="/files/<%= file.id %>/download">Download</a>
+  <a href="/folders/<%= file.folder.id %>">← Back to folder</a>
+</p>
+<%- include('../partials/footer') %>

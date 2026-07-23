@@ -1,0 +1,11 @@
+<%- include('partials/head') %>
+<% if (currentUser) { %>
+  <h1>Welcome back, <%= currentUser.username %></h1>
+  <p>Folders and uploads land here next.</p>
+  <p><a class="btn" href="/folders">Go to my folders →</a></p>
+
+<% } else { %>
+  <h1>File Uploader</h1>
+  <p>A stripped-down Drive. <a href="/signup">Sign up</a> to get started.</p>
+<% } %>
+<%- include('partials/footer') %>

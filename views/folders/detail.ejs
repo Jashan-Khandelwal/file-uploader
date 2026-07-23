@@ -1,0 +1,64 @@
+<%- include('../partials/head') %>
+<div class="page-head">
+  <h1>📁 <%= folder.name %></h1>
+  <span class="row-actions">
+    <a href="/folders/<%= folder.id %>/edit">Rename</a>
+    <form action="/folders/<%= folder.id %>/delete" method="POST" class="inline"
+          onsubmit="return confirm('Delete this folder and everything in it?');">
+      <button type="submit" class="link-btn danger">Delete</button>
+    </form>
+  </span>
+</div>
+
+<form action="/folders/<%= folder.id %>/upload" method="POST"
+      enctype="multipart/form-data" class="upload-bar">
+  <input type="file" name="file" required />
+  <button type="submit" class="btn">Upload</button>
+</form>
+
+<h2>Files</h2>
+<% if (folder.files.length === 0) { %>
+  <p class="muted">No files in this folder yet.</p>
+<% } else { %>
+  <ul class="file-list">
+    <% folder.files.forEach((file) => { %>
+      <li class="file-row">
+        <a class="file-name" href="/files/<%= file.id %>"><%= file.name %></a>
+        <span class="muted"><%= (file.size / 1024).toFixed(1) %> KB</span>
+        <span class="row-actions">
+          <a href="/files/<%= file.id %>/download">Download</a>
+          <form action="/files/<%= file.id %>/delete" method="POST" class="inline"
+                onsubmit="return confirm('Delete this file?');">
+            <button type="submit" class="link-btn danger">Delete</button>
+          </form>
+        </span>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<h2>Share this folder</h2>
+<form action="/folders/<%= folder.id %>/share" method="POST" class="share-form">
+  <label>Link expires in
+    <input type="text" name="duration" placeholder="e.g. 7d" required />
+  </label>
+  <button type="submit" class="btn">Create link</button>
+</form>
+
+<% if (folder.shares && folder.shares.length) { %>
+  <ul class="share-list">
+    <% folder.shares.forEach((s) => { %>
+      <li class="share-row">
+        <input type="text" class="share-link" readonly
+               value="<%= baseUrl %>/share/<%= s.id %>" onclick="this.select()" />
+        <span class="muted">expires <%= s.expiresAt.toLocaleString() %></span>
+        <form action="/folders/<%= folder.id %>/shares/<%= s.id %>/delete" method="POST" class="inline">
+          <button type="submit" class="link-btn danger">Revoke</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<p><a href="/folders">← Back to folders</a></p>
+<%- include('../partials/footer') %>

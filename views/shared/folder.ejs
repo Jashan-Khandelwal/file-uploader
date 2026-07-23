@@ -1,0 +1,19 @@
+<%- include('../partials/head') %>
+<h1>📁 <%= folder.name %></h1>
+<p class="muted">Shared folder · link expires <%= share.expiresAt.toLocaleString() %></p>
+
+<h2>Files</h2>
+<% if (folder.files.length === 0) { %>
+  <p class="muted">This folder is empty.</p>
+<% } else { %>
+  <ul class="file-list">
+    <% folder.files.forEach((file) => { %>
+      <li class="file-row">
+        <span class="file-name"><%= file.name %></span>
+        <span class="muted"><%= (file.size / 1024).toFixed(1) %> KB</span>
+        <a href="/share/<%= share.id %>/files/<%= file.id %>/download">Download</a>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+<%- include('../partials/footer') %>

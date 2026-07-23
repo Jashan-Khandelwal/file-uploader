@@ -1,0 +1,18 @@
+<%- include('../partials/head') %>
+<h1><%= title %></h1>
+<%- include('../partials/errors') %>
+<form action="<%= formAction %>" method="POST" class="card">
+  <label
+    >Folder name
+    <input
+      type="text"
+      name="name"
+      value="<%= folder.name %>"
+      required
+      autofocus
+    />
+  </label>
+  <button type="submit" class="btn">Save</button>
+</form>
+<p><a href="/folders">← Back to folders</a></p>
+<%- include('../partials/footer') %>

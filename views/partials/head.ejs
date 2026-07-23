@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="/">📁 File Uploader</a>
+      <div class="nav-links">
+        <% if (currentUser) { %>
+          <span class="who"><%= currentUser.username %></span>
+          <form action="/logout" method="POST" class="inline">
+            <button type="submit" class="link-btn">Log out</button>
+          </form>
+        <% } else { %>
+          <a href="/login">Log in</a>
+          <a href="/signup">Sign up</a>
+        <% } %>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
