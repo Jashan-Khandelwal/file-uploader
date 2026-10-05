@@ -8,6 +8,8 @@ const prisma = require("./db/prisma");
 const passport = require("./config/passport");
 
 const app = express();
+// Render sits behind a proxy; trust it so req.protocol is "https" in share links.
+app.set("trust proxy", 1);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
